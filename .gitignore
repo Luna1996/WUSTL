@@ -1,1 +1,10 @@
+# 503
 503/
+
+# latex intermediate
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+*.dvi

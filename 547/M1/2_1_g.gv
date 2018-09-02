@@ -1,0 +1,16 @@
+digraph "2.1 a" {
+  rankdir=LR
+  node[shape=none margin=0 width=0 label=""] 0
+  node[shape=circle width=0.5]
+  1[label="aabb" shape=doublecircle]
+  2[label="abb"]
+  3[label="aab"]
+  4[label="ab"]
+  {rank=same 1 2}
+  {rank=same 3 4}
+  0->1
+  2->1[label=a dir=both]
+  1->3[label=b dir=both]
+  2->4[label=b dir=both]
+  4->3[label=a dir=both]
+}

@@ -1,0 +1,11 @@
+digraph "2.1 b" {
+  rankdir=LR
+  node[shape=none margin=0 width=0 label=""] 0
+  node[shape=circle width=0.5 label="S\N"] 1 2
+  node[shape=doublecircle] 3
+  0 -> 1
+  1 -> 2 [label="a"]
+  2 -> 3 [label="a"]
+  1 -> 1 [label="b"]
+  2 -> 2 [label="b"]
+}
