@@ -3,9 +3,7 @@
 %	Create Date:	2017-02-14
 %	Last Modify:	2018-09-01
 %----------------------------------------------------------------------------------------
-\usepackage[T1]{fontenc}
 \usepackage{fourier}
-\usepackage[english]{babel}
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{geometry}
 \usepackage{fancyhdr}
@@ -15,7 +13,9 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{titling}
+\usepackage{fontspec}
 \usepackage{titlesec}
+\usepackage[colorlinks, urlcolor=blue]{hyperref}
 %-------------------------------%
 %          Page Style           %
 %-------------------------------%
@@ -42,7 +42,7 @@
 \newcommand{\xiaosi}{\fontsize{12.1pt}{\baselineskip}\selectfont}
 \newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
 \newcommand{\setFontSize}[1]{\fontsize{#1}{\baselineskip}\selectfont}
-\titleformat{\section}{\sanhao\bfseries}{$\bullet$}{5pt}{}
+\setmonofont{Inconsolatazi4}
 
 %-------------------------------%
 %             Title             %

@@ -1,0 +1,18 @@
+\documentclass{article}
+  \input{../../tools/Template}
+  \def\Assignment{CES571S - L1 - TCP/IP Attack}
+\begin{document}
+\maketitle
+\section{Lab Environment}
+We need 3 machines to accomplish this lab, one \textbf{Attacker}, one \textbf{Client}, one \textbf{Server}. I choose to create 3 VM with VirtualBox. In order to connet all 3 VM to internet and connet them with each others and the host, I create a bridge to share the Ethernet in the host, so they all under the 192.168.137.***.
+\section{Lab Tasks}
+\subsection{SYN Flooding Attack}
+In order to observe the attack result easily. I used a tool called \textbf{tcpping}, which is similar to ping but using tcp protocol. So hopefully my attack will jam the \textbf{tcpping}. And every thing worked smoothly.\\
+With {\ttfamily "netwox 76 -i 192.168.137.167 -p 80"}, the \textbf{Attacker} attacked the \textbf{Server} at port 80.\\
+With {\ttfamily "tcpping 192.168.137.167 80"}, the \textbf{Client} is able to send tcp request to \textbf{Server} at the same port. So we can find out if our attack were successful.\\
+And by the way, though the {\ttfamily "netwox 76"} won't log no matter it's success or not, we can still tell the difference physically. When the SYN cookie is turned on, this command won't do anything. But when the SYN cookie is turned off, this command will cause the cooling fan to make a huge noise.\\
+Screenshot: 
+\href{https://i.loli.net/2018/09/05/5b8f645f3315a.png}{Server}, 
+\href{https://i.loli.net/2018/09/05/5b8f645f325cf.png}{Client}, 
+\href{https://i.loli.net/2018/09/05/5b8f645f31ca2.png}{Attacker}
+\end{document}
