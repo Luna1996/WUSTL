@@ -1,0 +1,62 @@
+\documentclass{article}
+  \input{../../tools/Template}
+  \titleformat{\section}{\sanhao\bfseries}{}{5pt}{}
+  \def\Assignment{CES417T - Homework 1}
+\begin{document}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{1 \wuhao{(LFD Problem 1.3)}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\vw{{\mathbf w}}
+\def\vx{{\mathbf x}}
+\newcommand{\mol}[1]{\left\|#1\right\|}
+Follow the instruction step by step:
+\begin{tlist}{4}
+	\item[(a)]
+	Since $\vw^*$ is a separation of the data. We have $y_n = \text{sign}(\vw^{*T}\vx_n)\neq 0$, thus $\rho = \text{min}_{[1,N]}y_n(\vw^{*T}\vx_n) > 0$.
+	\item[(b)]
+	By the definition of $\rho$ and $\vw(t+1)=\vw(t)+y(t)\vx(t)$, we have
+	\begin{align*}
+		\left(\vw^T(t+1)-\vw^T(t)\right)\vw^*
+		 & =\ \left(\vw(t+1)-\vw(t)\right)^T\vw^* \\
+		 & =\ \left(y(t)\vx(t)\right)^T\vw^*      \\
+		 & =\ y(t)\vx^T(t)\vw^*                   \\
+		 & =\ y(t)\left(\vw^*\vx^T(t)\right)      \\
+		 & \geq\ \rho
+	\end{align*}
+	Denote $\rho_t = \left(\vw^T(t+1)-\vw^T(t)\right)\vw^*$. Then
+	\begin{align*}
+		\vw^T(t)\vw^*
+		 & =\ \vw^T(0)\vw^* + \sum_{k=0}^{t-1}\rho_k \\
+		 & =\ \sum_{k=0}^{t-1}\rho_k                 \\
+		 & \geq\ t\rho
+	\end{align*}
+	\item[(c)]
+	Since $y(t)\vw^T(t)\vx(t) \leq 0$, we have
+	\begin{align*}
+		\mol{\vw(t)}^2 - \mol{\vw(t-1)}^2 - \mol{\vx(t-1)}^2
+		 & =\ \vw^T(t)\vw(t) - \vw^T(t-1)\vw(t-1) - x^T(t-1)x(t-1)                        \\
+		 & =\ \left(\vw(t)-\vw(t-1)\right)^T\left(\vw(t)+\vw(t-1)\right) - x^T(t-1)x(t-1) \\
+		 & =\ \left(y(t-1)\vx(t-1)\right)^T\left(\vw(t)+\vw(t-1)\right)  - x^T(t-1)x(t-1) \\
+		 & \leq\ y(t-1)\vx^T(t-1)\vw(t) - x^T(t-1)x(t-1)                                  \\
+		 & =\ y(t-1)\vx^T(t-1)\left(\vw(t) -  y(t-1)\vx(t-1)\right)                       \\
+		 & =\ y(t-1)\vx^T(t-1)\vw(t-1)                                                    \\
+		 & \leq\ 0
+	\end{align*}
+	\item[(d)]
+	Based on \textbf{(c)}, we have
+	\begin{align*}
+		\mol{\vw(t)}^2
+		 & =\ \sum_{k = 1}^{t}\left(\mol{\vw(k)}^2 - \mol{\vw(k-1)}^2\right) \\
+		 & \leq\ \sum_{k = 1}^{t}\mol{\vx(t-1)}^2                            \\
+		 & \leq\ tR^2
+	\end{align*}
+	namely, $\mol{\vw(t)} \leq \sqrt{t}R$.
+	\item[(e)]
+	Based on \textbf{(b)} and \textbf{(d)}, we have
+	$$\frac{\vw^T(t)\vw^*}{\mol{\vw(t)}} \geq \frac{t\rho}{\sqrt{t}R} = \sqrt{t}\frac{\rho}{R}$$
+	Hence $t\leq\frac{R^2\mol{\vw^*}^2}{\rho^2}$, because $\frac{\vw(t)}{\mol{\vw(t)}}=1$.
+\end{tlist}
+Finally, we get an upper bound of $t$, which means PLA will converge.
+
+\end{document}

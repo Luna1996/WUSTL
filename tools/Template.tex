@@ -59,14 +59,26 @@
 }
 \author{467261 - Yifu Wang}
 \date{\normalsize\today\\\horrule{1pt} \\[0.5cm]}
+% \titleformat{\section}{\sanhao\bfseries}{\thesection\ }{5pt}{}
+% \titleformat{\subsection}{\sihao}{\thesubsection\ }{1pt}{}
+% \titleformat{\subsubsection}{\sihao}{\thesubsubsection\ }{1pt}{}
 
 %-------------------------------%
 %           TableList           %
 %-------------------------------%
+\makeatletter
+\newcount\my@repeat@count
+\newcommand{\myrepeat}[2]{%
+  \begingroup
+  \my@repeat@count=\z@
+  \@whilenum\my@repeat@count<#1\do{#2\advance\my@repeat@count\@ne}%
+  \endgroup
+}
+\makeatother
 \newcommand{\deflabel}[1]{#1\hfill}
 \newenvironment{tlist}[1]{
 	\begin{list}{}{
-			\settowidth{\labelwidth}{\bf#1}
+			\settowidth{\labelwidth}{\bf\myrepeat{#1}{\ }}
 			\setlength{\leftmargin}{\labelwidth}
 			\addtolength{\leftmargin}{\labelsep}
 			\renewcommand{\makelabel}{\bf\deflabel}}}{
