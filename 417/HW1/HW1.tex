@@ -5,7 +5,7 @@
 \begin{document}
 \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{1 \wuhao{(LFD Problem 1.3)}}
+\section{1 \wuhao{LFD Problem 1.3}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\vw{{\mathbf w}}
 \def\vx{{\mathbf x}}
@@ -58,5 +58,90 @@ Follow the instruction step by step:
 	Hence $t\leq\frac{R^2\mol{\vw^*}^2}{\rho^2}$, because $\frac{\vw(t)}{\mol{\vw(t)}}=1$.
 \end{tlist}
 Finally, we get an upper bound of $t$, which means PLA will converge.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{2 \wuhao{Lab}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The histogram of iterations of 1,000 experiments seems normal:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{lab.png}
+\end{figure}
+\ \\
+The bound of $t$ however is not as useful as it should be:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{bound.png}
+\end{figure}
+\ \\
+The average of bounds is $2.0250 \times 10^9$, which is much larger than the actual iterations. This is reasonable, the expected value of bounds is actually calculatable. But I won't do the math here, since the $\text{E}\left(\frac{R^2\mol{\vw^*}^2}{\rho^2}\right)$ is extremly complex and it's not required in this assignment. To calculate this you should at least master the distribution of min value and max value and Chi square distribution. However just give a second thought you can get the idea that why this value tends to be so big, since $\rho$ is a min value, it tend to $0$, and none of $R$ or $\mol{\vw}$ tend to $0$. So I assume that the bound we calculated in problem 1 is merely a math tool to prove the convergence of PLA.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{3 \wuhao{LED Problem 1.7}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\P{\mathbb{P}}
+\newcommand{\e}[2]{$#1 \times 10^{#2}$}
+\begin{tlist}{4}
+	\item[(a)]
+	Simply follow $\P=1-\left[1-(1-\mu)^N\right]^{coins}$, we have
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|}\hline
+			\diagbox{$\mu$}{coins} & $1$            & $1000$         & $1000000$ \\\hline
+			$0.05$                 & $0.5987$       & $1$            & $1$       \\\hline
+			$0.8$                  & \e{1.0240}{-7} & \e{1.0239}{-4} & $0.0973$  \\\hline
+		\end{tabular}
+	\end{center}
+	\item[(b)]
+	Since $\P(k)=\left(\begin{array}{c}6\\k\end{array}\right)0.5^6$, the distribution of $v$ should be
+	$$
+		\begin{array}{c|ccccccc}
+			v    & 0      & 1/6    & 1/3    & 1/2    & 2/3    & 5/6    & 1      \\\hline
+			P(v) & 0.0156 & 0.0938 & 0.2344 & 0.3125 & 0.2344 & 0.0938 & 0.0156 \\
+		\end{array}
+	$$
+	Denote $w_i = |v_i-\mu_i|$ for $i = 1,2$. the distribution of $w_i$ should be
+	$$
+		\begin{array}{c|cccc}
+			w_i    & 0      & 1/6    & 1/3    & 1/2    \\\hline
+			P(w_i) & 0.3125 & 0.4688 & 0.1876 & 0.0312 \\
+		\end{array}
+	$$
+	Then $\P(\max\limits_i w_i>\epsilon)=1-\P(\max\limits_i w_i\leq\epsilon)=1-\P(w_1\leq\epsilon)\P(w_2\leq\epsilon)$. Thus we have
+	$$
+		\begin{array}{c|cccc}
+			\epsilon                      & [0,1/6) & [1/6,1/3) & [1/3,1/2) & [1/2,1) \\\hline
+			P(\max\limits_i w_i>\epsilon) & 0.9023  & 0.3896    & 0.0612    & 0       \\
+		\end{array}
+	$$
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{3.png}
+	\end{figure}
+\end{tlist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{4 \wuhao{LED Problem 1.8}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\E{\mathbb{E}}
+\begin{tlist}{4}
+	\item[(a)]
+	Denote the $f(x)$ as the PDF of $t$, we have
+	\begin{align*}
+		\P\left[t\geq \alpha\right]
+		 & =\ \int_\alpha^\infty f(x)dx                        \\
+		 & =\ \frac{1}{\alpha}\int_\alpha^\infty \alpha f(x)dx \\
+		 & \leq\ \frac{1}{\alpha}\int_\alpha^\infty xf(x)dx    \\
+		 & =\ \E(t)/\alpha                                     \\
+	\end{align*}
+	\item[(b)]
+	It's obviously true based on the proof of \textbf{(a)} and $\E\left[(u-\mu)^2\right]=\sigma^2$.
+	\item[(c)]
+	Based on \textbf{(b)}, and since $u_i$ are iid. we show
+	\begin{align*}
+		\E\left[(u-\mu)^2\right]
+		 & =\ \E\left[\frac{1}{N^2}\left(\sum_{n=1}^N(u_n-\mu)\right)^2\right]                                  \\
+		 & =\ \frac{1}{N^2}\E\left[\left(\sum_{n=1}^N(u_n-\mu)^2+\sum_{i\neq j}(u_i-\mu)(u_j-\mu)\right)\right] \\
+		 & =\ \frac{1}{N^2}\E\left[\sum_{n=1}^N(u_n-\mu)^2\right]                                               \\
+		 & =\ \frac{\sum_{n=1}^N\E(u_n-\mu)^2}{N^2}                                                             \\
+		 & =\ \frac{\sigma^2}{N}                                                                                \\
+	\end{align*}
+	Namely, $\P\left[(u-\mu)^2\geq \alpha\right]\leq\frac{\sigma^2}{N\alpha}$.
+\end{tlist}
 \end{document}

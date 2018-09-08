@@ -1,7 +1,7 @@
 # 503
 503/
 
-# latex intermediate
+# latex
 *.aux
 *.fdb_latexmk
 *.fls
@@ -9,3 +9,6 @@
 *.gz
 *.dvi
 *.out
+
+# matlab
+*.asv
