@@ -12,3 +12,6 @@
 
 # matlab
 *.asv
+
+#dump
+*.cap

