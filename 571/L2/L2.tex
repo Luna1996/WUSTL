@@ -25,7 +25,7 @@
     Here is the \href{http://freetexthost.com/j54kutb05a}{solution} I obtained and the \href{https://www.guballa.de/substitution-solver}{solver} I used.
     
     \section{Encryption Mode - ECB vs. CBC}
-    This task is somehow related to another course I take, CSE554T, where we learn to process 2D or 3D img data using Mathematica language. It's a interactive programming language. I choose use it for this task and I upload the source code to github. The following is a simple explaination of the code.
+    This task is somehow related to another course I take, CSE554T, where we learn to process 2D or 3D img data using Mathematica language. It's a interactive programming language. I choose use it for this task and I upload the source code to \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task2.m}{github}. The following is a simple explaination of the code.
     \begin{tlist}{3}
       \item[1.]\code{KeyGen} generate a L-byte-long random key.
       \item[2.]The block cipher used in \code{ECB} and \code{CBC} are \code{BitXor} for simple.
@@ -42,4 +42,10 @@
     \href{https://i.loli.net/2018/09/24/5ba874d193869.jpg}{CBC}
 
     \section{Error Propagation - Corrupted Cipher Text}
+    To answer the question first.
+    \begin{tlist}{2}
+      \item[$\bullet$]\textbf{ECB,OFB} will only affect the block where the corruption happend.
+      \item[$\bullet$]\textbf{CBC,CFB} will affect the block where the corruption happend and the block after it.
+    \end{tlist}
+    In order to observe the corruption easily. The plaintext I choose will be character \code{'1'} repeated 1008 times.
   \end{document}
