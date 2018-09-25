@@ -119,7 +119,19 @@ $$
 $$
 Thus if we construct
 $$P2 = IV2 \oplus IV1 \oplus P1$$
-we shall get $C1 = C2$. The Javascript source code is uploaded to github. And from the debug view, we can see \code{P1 = Yes}.\\
-When conduct this attacking. I encountered a truble. That is when the plaintext is not a multiple of 16 (key size in byte). aes-js package will throw a error and refuse to continue any calculation. And I don't know what has been append to the P1 by default. So I have to using the key (known only to Bob) to decrypt the C1 and found out that \code{'\r'}s have been added to make a 16 length P1. And the code of \code{'\r'} is 13. That's the reason of line 11.
+we shall get $C1 = C2$. The Javascript
+\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task43.js}{source code}
+is uploaded to github. And from the
+\href{https://i.loli.net/2018/09/25/5ba9d18306d92.png}{debug view}
+, we can see \code{P1 = Yes}.\\
+When conduct this attacking. I encountered a truble. That is when the plaintext is not a multiple of 16 (key size in byte). aes-js package will throw a error and refuse to continue any calculation. And I don't know what has been append to the P1 by default. So I have to using the key (known only to Bob) to decrypt the C1 and found out that \code{'\textbackslash{r}'}s have been added to make a 16 length P1. And the code of \code{'\r'} is 13. That's the reason of line 11.
 
+\section{Programming using the Crypto Library}
+The Javascript source code is uploaded to github. From the
+\href{https://i.loli.net/2018/09/25/5ba9dc456b4f4.png}{debug view}
+, we can see
+\begin{center}
+	\code{key = 'oracle\#\#\#\#\#\#\#\#\#\#'}
+\end{center}
+The main truble I encountered by using Javascript is I don't know what character should be append to the plaintext to perform the encryption. I tried using \code{'\textbackslash{r}'} as it was used in task 4.3, but that doesn't work. So I just try in the opposite direction, I decrypt the ciphertext and check if it start with plaintext. This works prerry fine, only cost 225ms in V8 engine.
 \end{document}
