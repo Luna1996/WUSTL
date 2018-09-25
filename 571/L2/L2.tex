@@ -2,50 +2,81 @@
   \input{../../tools/Template}
   \def\Assignment{CES571S - L2 - Crypto Encryption}
 \begin{document}
-    \maketitle
-    \section{Substitution Cipher}
-    I didn't reinvent the crypto algorithm for substitution cipher. I did some research in this field and use the substitution solver to solve this online. The following steps is the path I will take to implement a solver by myself.
-    \begin{tlist}{3}
-      \item[1.]
-      Scan the ciphertext, record the frequency of each letter, record the frequency of each 1-letter, 2-letter, 3-letter words, record the pattern of two consequent same letter.
-      \item[2.]
-      The frequency of what we recorded in step one in plaintext of English should be
-      \begin{tlist}{0}
-        \item[letter:]\{ETAOIN/RSHDL\}>0.04, \{CU/FMPGWY\}>0.02, \{BV/KXJQZ\}<0.02
-        \item[1-letter word:]a, i
-        \item[2-letter word:]of, to, in, it, is, be, as, at, so, we, he, by, or, on, no...
-        \item[3-letter word:]the, and...
-        \item[consequent pattern:]ss, ee, tt, ff, ll, mm, oo...
-      \end{tlist}
-      \item[3.]
-      Sort the a-z letters by the frequency we recorded and use this as an initial key for our algorithm. This algorithm could be Hill Climbing, Simulated Annealing or Genetic Algorithm. In order to find the best solution which make our translated text fit the frequency table listed in step 2 best. We need a algorithm to measure the fitness of current solution. This algorithm can be as simple as measure how close a 'out-of-order' sequence to a 'well-ordered' sequence.
-      \item[4.]
-      After we get the solution from step 3. The key we obtained might be still not right. Then we exchange the letter in the same group in the \textbf{letter} listed in step 2 by exhaustive method. Quit the algorithm once the grading of current solution exceed the pre-set threshold.
-    \end{tlist}
-    Here is the \href{http://freetexthost.com/j54kutb05a}{solution} I obtained and the \href{https://www.guballa.de/substitution-solver}{solver} I used.
-    
-    \section{Encryption Mode - ECB vs. CBC}
-    This task is somehow related to another course I take, CSE554T, where we learn to process 2D or 3D img data using Mathematica language. It's a interactive programming language. I choose use it for this task and I upload the source code to \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task2.m}{github}. The following is a simple explaination of the code.
-    \begin{tlist}{3}
-      \item[1.]\code{KeyGen} generate a L-byte-long random key.
-      \item[2.]The block cipher used in \code{ECB} and \code{CBC} are \code{BitXor} for simple.
-      \item[3.]The IV used in \code{CBC} is randomly generated, since we didn't really need to decrypt the image.
-    \end{tlist}
-    The following 3 images are origin, ECB and CBC.
-    \begin{figure}[H]\centering\includegraphics{pic_original.png}\end{figure}
-    \begin{figure}[H]\centering\includegraphics{pic_ecb.png}\end{figure}
-    \begin{figure}[H]\centering\includegraphics{pic_cbc.png}\end{figure}
-    You can see that the encrypted img produced by ECB still preserve the shape of original img. That is because when using an ECB same plaintext will be encrypted into same ciphertext. By applying CBC you can eliminate such disadvantage.\\
-    Following 3 images reproduce this phenomenon using another original image.
-    \href{https://i.loli.net/2018/09/24/5ba874d18c3b5.jpg}{original}
-    \href{https://i.loli.net/2018/09/24/5ba874d19386e.jpg}{ECB}
-    \href{https://i.loli.net/2018/09/24/5ba874d193869.jpg}{CBC}
+\maketitle
+\section{Substitution Cipher}
+I didn't reinvent the crypto algorithm for substitution cipher. I did some research in this field and use the substitution solver to solve this online. The following steps is the path I will take to implement a solver by myself.
+\begin{tlist}{3}
+	\item[1.]
+	Scan the ciphertext, record the frequency of each letter, record the frequency of each 1-letter, 2-letter, 3-letter words, record the pattern of two consequent same letter.
+	\item[2.]
+	The frequency of what we recorded in step one in plaintext of English should be
+	\begin{tlist}{0}
+		\item[letter:]\{ETAOIN/RSHDL\}>0.04, \{CU/FMPGWY\}>0.02, \{BV/KXJQZ\}<0.02
+		\item[1-letter word:]a, i
+		\item[2-letter word:]of, to, in, it, is, be, as, at, so, we, he, by, or, on, no...
+		\item[3-letter word:]the, and...
+		\item[consequent pattern:]ss, ee, tt, ff, ll, mm, oo...
+	\end{tlist}
+	\item[3.]
+	Sort the a-z letters by the frequency we recorded and use this as an initial key for our algorithm. This algorithm could be Hill Climbing, Simulated Annealing or Genetic Algorithm. In order to find the best solution which make our translated text fit the frequency table listed in step 2 best. We need a algorithm to measure the fitness of current solution. This algorithm can be as simple as measure how close a 'out-of-order' sequence to a 'well-ordered' sequence.
+	\item[4.]
+	After we get the solution from step 3. The key we obtained might be still not right. Then we exchange the letter in the same group in the \textbf{letter} listed in step 2 by exhaustive method. Quit the algorithm once the grading of current solution exceed the pre-set threshold.
+\end{tlist}
+Here is the \href{http://freetexthost.com/j54kutb05a}{solution} I obtained and the \href{https://www.guballa.de/substitution-solver}{solver} I used.
 
-    \section{Error Propagation - Corrupted Cipher Text}
-    To answer the question first.
-    \begin{tlist}{2}
-      \item[$\bullet$]\textbf{ECB,OFB} will only affect the block where the corruption happend.
-      \item[$\bullet$]\textbf{CBC,CFB} will affect the block where the corruption happend and the block after it.
-    \end{tlist}
-    In order to observe the corruption easily. The plaintext I choose will be character \code{'1'} repeated 1008 times.
-  \end{document}
+\section{Encryption Mode - ECB vs. CBC}
+This task is somehow related to another course I take, CSE554T, where we learn to process 2D or 3D img data using Mathematica language. It's a interactive programming language. I choose use it for this task and I upload the source code to \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task2.m}{github}. The following is a simple explaination of the code.
+\begin{tlist}{3}
+	\item[1.]\code{KeyGen} generate a L-byte-long random key.
+	\item[2.]The block cipher used in \code{ECB} and \code{CBC} are \code{BitXor} for simple.
+	\item[3.]The IV used in \code{CBC} is randomly generated, since we didn't really need to decrypt the image.
+\end{tlist}
+The following 3 images are origin, ECB and CBC.
+\begin{figure}[H]\centering\includegraphics{pic_original.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{pic_ecb.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{pic_cbc.png}\end{figure}
+You can see that the encrypted img produced by ECB still preserve the shape of original img. That is because when using an ECB same plaintext will be encrypted into same ciphertext. By applying CBC you can eliminate such disadvantage.\\
+Following 3 images reproduce this phenomenon using another original image.
+\href{https://i.loli.net/2018/09/24/5ba874d18c3b5.jpg}{original}
+\href{https://i.loli.net/2018/09/24/5ba874d19386e.jpg}{ECB}
+\href{https://i.loli.net/2018/09/24/5ba874d193869.jpg}{CBC}
+
+\section{Error Propagation - Corrupted Cipher Text}
+To answer the question first.
+\begin{tlist}{2}
+	\item[$\bullet$]\textbf{ECB,OFB} will only affect the block where the corruption happend.
+	\item[$\bullet$]\textbf{CBC,CFB} will affect the block where the corruption happend and the block after it.
+\end{tlist}
+In order to observe the corruption easily. The plaintext I choose will be character \code{'1'} repeated 1008 times.
+I used Javascript with the package 'aes-js' to perform this task. I encountered several truble by doing so.
+\begin{tlist}{2}
+	\item[$\bullet$]I have tried another famouse npm package for crypto, 'crypto-js', but I couldn't corrupt the ciphertext produced by it. It seems that 'crypto-js' do extra work to make sure ciphertext is untouched.
+\end{tlist}
+Here is the \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task3.js}{source code}. And the results: (the block refers to the block locate at corrupt point)
+\begin{tlist}{2}
+	\item[$\bullet$]
+	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/ecb.txt}{\textbf{ECB}}
+	only the block breaks.
+	\item[$\bullet$]
+	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/cbc.txt}{\textbf{CBC}}
+	and
+	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/cfb.txt}{\textbf{CFB}}
+	only the block and the block after it.
+	\item[$\bullet$]
+	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/ofb.txt}{\textbf{OFB}}
+	every block break, totally unreadable.
+\end{tlist}
+The result of OFB is unexpected. Which I don't understand. From the definition in \href{https://i.loli.net/2018/09/24/5ba8a461a5228.png}{this picture}. And from the mathematical definition
+$$
+	\begin{aligned}
+		C_i & =\ P_i\oplus O_i \\
+		P_i & =\ C_i\oplus O_i \\
+		O_i & =\ E_k(O_{i-1})  \\
+		O_0 & =\ IV
+	\end{aligned}
+$$
+It seems that the single byte corruption won't cause any propagation.
+
+\section{Initial Vector}
+\subsection{}
+\end{document}
