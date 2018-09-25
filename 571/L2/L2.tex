@@ -87,16 +87,39 @@ The plaintext is
 \end{center}
 \code{key}, \code{iv1} and \code{iv2} are randomly generated. \code{e1} and \code{e2} using \code{iv1} as IV, \code{e3} using \code{iv2}. \code{e1} and \code{e2} are excatly same. Here is the \href{https://i.loli.net/2018/09/25/5ba9b6889cf97.png}{screen shot}. Thus since using same IV will cause the same plaintext encrypted into the same ciphertext. It's vulnerable under strong attacking.
 \subsection{}
-Yes we can. Since we have$$
-\begin{aligned}
-	C_i & =\ P_i\oplus O_i \\
-	P_i & =\ C_i\oplus O_i \\
-	O_i & =\ E_k(O_{i-1})  \\
-	O_0 & =\ IV
-\end{aligned}
+Yes we can. Since we have
 $$
-thus $O_i = C_i\oplus P_i$. Furthermore if IV remains same, all $O_i$ will remain same. By running this algorithm. We have
+	\begin{aligned}
+		C_i & =\ P_i\oplus O_i \\
+		P_i & =\ C_i\oplus O_i \\
+		O_i & =\ E_k(O_{i-1})  \\
+		O_0 & =\ IV
+	\end{aligned}
+$$
+thus $O_i = C_i\oplus P_i$. Furthermore if IV remains same, all $O_i$ will remain same. By running \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task42.js}{this algorithm}. We have
 \begin{center}
 	\code{P2 = 'Order: Lauch a missile!'}
 \end{center}
+If we replace OFB with CFB. We will at least reveal the first bolck of \code{P2}. Since by the definition
+$$
+	\begin{aligned}
+		C_i & =\ E_K(C_{i-1})\oplus P_i \\
+		P_i & =\ E_K(C_{i-1})\oplus C_i \\
+		C_0 & =\ IV
+	\end{aligned}
+$$
+only $C_0$ will remain unchanged between two cipher processes.
+\subsection{}
+The definition of CBC is (only one block)
+$$
+	\begin{aligned}
+		C1 & =\ E_K(IV1\oplus P1) \\
+		C2 & =\ E_K(IV2\oplus P2)
+	\end{aligned}
+$$
+Thus if we construct
+$$P2 = IV2 \oplus IV1 \oplus P1$$
+we shall get $C1 = C2$. The Javascript source code is uploaded to github. And from the debug view, we can see \code{P1 = Yes}.\\
+When conduct this attacking. I encountered a truble. That is when the plaintext is not a multiple of 16 (key size in byte). aes-js package will throw a error and refuse to continue any calculation. And I don't know what has been append to the P1 by default. So I have to using the key (known only to Bob) to decrypt the C1 and found out that \code{'\r'}s have been added to make a 16 length P1. And the code of \code{'\r'} is 13. That's the reason of line 11.
+
 \end{document}
