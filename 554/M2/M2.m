@@ -88,7 +88,7 @@ buildCC3D[bimg_]:=
 (*Algorithm 3 *)
 
 
-thinExhaustive[cc_,keep_:(False&)]:=Module[
+thinExhaustive[cc_,keep_:(True&)]:=Module[
 	{C,M1,M2,D,T,t},
 	C=cc;
 	M1=M2=Map[0&,cc,{2}];
@@ -102,7 +102,7 @@ thinExhaustive[cc_,keep_:(False&)]:=Module[
 		Do[
 			t=M1[[d-1,c]];
 			(* Find a simple pair *)
-			If[M2[[d-1,c]]==1&&!keep[d,t,d-1,c],
+			If[M2[[d-1,c]]==1&&keep[d,t,d-1,c],
 			(* Mark the pair as removeable *)
 			T[[d-1,c]]=0;T[[d,t]]=0;
 			(* Mark the other boundary of the simple cell as unremoveable *)
@@ -131,7 +131,7 @@ thin[cc_,{t1_:{Infinity,1},t2_:{Infinity,1}}]:=
 	Module[{C1,C2,I,S,m,keep,k},
 		C1=cc;
 		I=Map[Infinity&,cc,{2}];
-		keep=(If[k-I[[#1,#2]]>m[[#1]],AppendTo[S,{#1,#2}];AppendTo[S,{#3,#4}];True,False])&;
+		keep=(If[k-I[[#1,#2]]>m[[#1]],AppendTo[S,{#1,#2}];AppendTo[S,{#3,#4}];False,True])&;
 		k=0;
 		While[!sameCC[C1,C2],
 			C2=C1;
