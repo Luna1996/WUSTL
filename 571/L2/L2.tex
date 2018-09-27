@@ -3,6 +3,7 @@
   \def\Assignment{CES571S - L2 - Crypto Encryption}
 \begin{document}
 \maketitle
+I'm using \href{https://sm.ms/}{SM.MS}, a free and clean image host, to store my screenshots online, it's pretty safy. If that cause you any trouble, I will include my screenshots in pdf in future labs.
 \section{Substitution Cipher}
 I didn't reinvent the crypto algorithm for substitution cipher. I did some research in this field and use the substitution solver to solve this online. The following steps is the path I will take to implement a solver by myself.
 \begin{tlist}{3}
@@ -47,36 +48,41 @@ To answer the question first.
 	\item[$\bullet$]\textbf{ECB,OFB} will only affect the block where the corruption happend.
 	\item[$\bullet$]\textbf{CBC,CFB} will affect the block where the corruption happend and the block after it.
 \end{tlist}
-In order to observe the corruption easily. The plaintext I choose will be character \code{'1'} repeated 1008 times.
-I used Javascript with the package 'aes-js' to perform this task. I encountered several truble by doing so.
-\begin{tlist}{2}
-	\item[$\bullet$]I have tried another famouse npm package for crypto, 'crypto-js', but I couldn't corrupt the ciphertext produced by it. It seems that 'crypto-js' do extra work to make sure ciphertext is untouched.
-\end{tlist}
-Here is the \href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/task3.js}{source code}. And the results: (the block refers to the block locate at corrupt point)
-\begin{tlist}{2}
-	\item[$\bullet$]
-	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/ecb.txt}{\textbf{ECB}}
-	only the block breaks.
-	\item[$\bullet$]
-	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/cbc.txt}{\textbf{CBC}}
-	and
-	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/cfb.txt}{\textbf{CFB}}
-	only the block and the block after it.
-	\item[$\bullet$]
-	\href{https://github.com/Luna1996/WUSTL/blob/master/571/L2/ofb.txt}{\textbf{OFB}}
-	every block break, totally unreadable.
-\end{tlist}
-The result of OFB is unexpected. Which I don't understand. From the definition in \href{https://i.loli.net/2018/09/24/5ba8a461a5228.png}{this picture}. And from the mathematical definition
-$$
-	\begin{aligned}
-		C_i & =\ P_i\oplus O_i \\
-		P_i & =\ C_i\oplus O_i \\
-		O_i & =\ E_k(O_{i-1})  \\
-		O_0 & =\ IV
-	\end{aligned}
-$$
-It seems that the single byte corruption won't cause any propagation.
-
+In order to observe the corruption easily. The plaintext I choose will be character \code{'1'} repeated 1008 times. Here is
+\href{https://i.loli.net/2018/09/27/5bac19f92ebad.png}{the plaintext}.\\
+I'm using this \href{http://aes.online-domain-tools.com/}{online AES tools} for this task. The following table is a summary of the results.
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		                                                                 &
+		Encrypted                                                        &
+		Corrupted                                                        &
+		Decrypted                                                        &
+		Results                                                            \\\hline
+		ECB                                                              &
+		\href{https://i.loli.net/2018/09/27/5bac1a285802c.png}{ecb0.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a285a250.png}{ecb1.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a284fdca.png}{ecb2.png} &
+		Only 4th block changed                                             \\\hline
+		CBC                                                              &
+		\href{https://i.loli.net/2018/09/27/5bac1a94a998c.png}{cbc0.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a94abb6c.png}{cbc1.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1d5bbd4c5.png}{cbc2.png} &
+		4th and 5th blocks changed                                         \\\hline
+		CFB                                                              &
+		\href{https://i.loli.net/2018/09/27/5bac1a94adccb.png}{cfb0.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a94e6892.png}{cfb1.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a94a3609.png}{cfb2.png} &
+		4th and 5th blocks changed                                         \\\hline
+		OFB                                                              &
+		\href{https://i.loli.net/2018/09/27/5bac1a94e4a51.png}{ofb0.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a94e2d20.png}{ofb1.png} &
+		\href{https://i.loli.net/2018/09/27/5bac1a94d97a0.png}{ofb2.png} &
+		Only 4th block changed                                             \\\hline
+	\end{tabular}
+\end{center}
+Though there is nothing unexpected. But let take a look at result result of CBC and OFB. In 5th block only 6th byte changed(we changed 6th byte in 4th block), that is because we actually calculated the xor of original ciphertext with the edited ciphertext
+ and the only difference is the 6th byte. The similar reason also apply to the result of OFB where only the 6th byte of the 4th block changed.
 \section{Initial Vector}
 \subsection{}
 The Javascript source code is upload to
