@@ -1,9 +1,8 @@
 %----------------------------------------------------------------------------------------
 %	Author:	WangYifu
 %	Create Date:	2017-02-14
-%	Last Modify:	2018-09-01
+%	Last Modify:	2018-09-30
 %----------------------------------------------------------------------------------------
-\usepackage{fourier}
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{geometry}
 \usepackage{fancyhdr}
@@ -71,10 +70,10 @@
 \makeatletter
 \newcount\my@repeat@count
 \newcommand{\myrepeat}[2]{%
-  \begingroup
-  \my@repeat@count=\z@
-  \@whilenum\my@repeat@count<#1\do{#2\advance\my@repeat@count\@ne}%
-  \endgroup
+	\begingroup
+	\my@repeat@count=\z@
+	\@whilenum\my@repeat@count<#1\do{#2\advance\my@repeat@count\@ne}%
+	\endgroup
 }
 \makeatother
 \newcommand{\deflabel}[1]{#1\hfill}

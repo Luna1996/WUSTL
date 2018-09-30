@@ -1,0 +1,1 @@
+[g,E,bias,var]=bias_var_exp(100000,100);
