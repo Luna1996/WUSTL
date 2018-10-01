@@ -1,0 +1,54 @@
+\documentclass{article}
+  \input{../../tools/Template}
+  \def\Assignment{CSE 547T - HW3}
+  \usepackage[pdf]{graphviz}
+\begin{document}
+\maketitle
+\begin{tlist}{10}
+	\item[3.38 (c)]\
+	\begin{center}
+		\begin{tabular}{c|c|c}
+			  & $\sigma(q,a)$ & $\sigma(q,b)$ \\\hline
+			1 & \{1,2\}       & \{2\}         \\
+			2 & \{3\}         & \{2\}         \\
+			3 & \{3\}         & \{3,4\}       \\
+			4 & $\emptyset$   & $\emptyset$   \\
+		\end{tabular}
+	\end{center}
+	\begin{figure}[H]\centering\includegraphics[scale=.6]{g1.png}\end{figure}
+	\item[3.38 (d)]\
+	\begin{center}
+		\begin{tabular}{c|c|c}
+			  & $\sigma(q,a)$ & $\sigma(q,b)$ \\\hline
+			1 & \{2\}         & $\emptyset$   \\
+			2 & $\emptyset$   & \{3\}         \\
+			3 & \{1,4,5\}     & $\emptyset$   \\
+			4 & \{5\}         & $\emptyset$   \\
+			5 & \{1\}         & $\emptyset$   \\
+		\end{tabular}
+	\end{center}
+	\begin{figure}[H]\centering\includegraphics[scale=.6]{g2.png}\end{figure}
+	\item[2.22 (a)]
+	\begin{tlist}{2}
+		\item[$\bullet$]
+		Assume $L$ is accepted by an FA with $m$ states, where $m\in\mathbb{N}^+$.
+		\item[$\bullet$]
+		Consider string $s=a^mba^{2m}$, since $|s|>m$, by pumping lemma we should be able to find such a 3-tuple $(u,v,w)$ where $s=uvw$ and $v\neq\Lambda$ that $uv^iw\in L\ \forall\ i\in\mathbb{N}$.
+		\item[$\bullet$]
+		Firstly, $v$ couldn't contains $b$, since all string in $L$ contains only one $b$. So $v$ should be contained either in $a^m$ part or $a^{2m}$ part. But then the variation of $i$ will break the proportion between this two parts.
+		\item[$\bullet$]
+		Thus $L$ can't be accepted by an FA.
+	\end{tlist}
+	\item[2.22 (b)]
+	\begin{tlist}{2}
+		\item[$\bullet$]
+		Assume $L$ is accepted by an FA with $m$ states, where $m\in\mathbb{N}^+$.
+		\item[$\bullet$]
+		Consider string $s=a^mb^ma^{2m+1}$, since $|s|>m$, by pumping lemma we should be able to find such a 3-tuple $(u,v,w)$ where $s=uvw$ and $v\neq\Lambda$ that $uv^tw\in L\ \forall\ t\in\mathbb{N}$.
+		\item[$\bullet$]
+		Firstly, let's divide $s$ into 3 parts, which are $a^m$, $b^m$ and $a^{2m+1}$. Obviously $v$ can only be contained in one part, otherwise the variation of $i$ will destroy this 3-parts pattern. Secondly, $v$ can't be contained in the first two parts, since when $t$ goes up, $i+j$ will exceed $k$ eventually. But again, $v$ can't be contained in part 3 either. Since $|v|\neq 0$, thus when we take $t=0$, we will get $i+j=k$ which is not acceptable.
+		\item[$\bullet$]
+		Thus $L$ can't be accepted by an FA.
+	\end{tlist}
+\end{tlist}
+\end{document}

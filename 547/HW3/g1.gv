@@ -1,0 +1,27 @@
+graph G {
+  overlap=false
+  splines=true
+  node[shape=none margin=0 width=0 height=0 label=""]
+  0
+  node[shape=doublecircle width=0.5 label="\N"]
+  1[pos="" shape=circle]
+  2[pos=""]
+  3[pos="" shape=circle]
+  4[pos="" label="1,2"]
+  5[pos="" label="1,2,3"]
+  6[pos="" label="2,3,4"]
+  7[pos="" label="3,4"]
+  
+  edge[dir=forward]
+  0--1
+  edge[label="a"]
+  1--4--5--5
+  2--3--3
+  6--3
+  7--3
+  edge[label="b"]
+  1--2--2
+  3--7--7
+  4--2
+  5--6--6
+}
