@@ -3,6 +3,7 @@
 BeginPackage["M2`"];
 buildCC2D;
 buildCC3D;
+buildCC3D2;
 thinExhaustive;
 sameCC;
 thin;
@@ -84,40 +85,80 @@ buildCC3D[bimg_]:=
 	C];
 
 
+buildCC3D2[bimg_]:=
+	Module[{C,X,Y,Z,M,b,c0,c1,c2},
+		C={{},{},{},{}};
+		{X,Y,Z}=Dimensions[bimg]*2-1;
+		M=Table[0,X,Y,Z];
+		c0=c1=c2=0;
+		Do[If[bimg[[x,y,z]]==1,
+			AppendTo[C[[1]],{x-1,y-1,z-1}];
+			M[[x*2-1,y*2-1,z*2-1]]=++c0],
+		{x,(X+1)/2},{y,(Y+1)/2},{z,(Z+1)/2}];
+		Do[If[M[[x,y,z]]>0,
+			b={
+				M[[x,y,z]],
+				If[x>1,M[[x-2,y,z]],0],
+				If[y>1,M[[x,y-2,z]],0],
+				If[z>1,M[[x,y,z-2]],0],
+				If[x>1&&y>1,M[[x-2,y-2,z]],0],
+				If[x>1&&z>1,M[[x-2,y,z-2]],0],
+				If[z>1&&y>1,M[[x,y-2,z-2]],0],
+				If[x>1&&y>1&&z>1,M[[x-2,y-2,z-2]],0]};
+			If[b[[2]]>0,AppendTo[C[[2]],{b[[1]],b[[2]]}];M[[x-1,y,z]]=++c1];
+			If[b[[3]]>0,AppendTo[C[[2]],{b[[1]],b[[3]]}];M[[x,y-1,z]]=++c1];
+			If[b[[4]]>0,AppendTo[C[[2]],{b[[1]],b[[4]]}];M[[x,y,z-1]]=++c1];
+			If[b[[2]]>0&&b[[3]]>0&&b[[5]]>0,AppendTo[C[[3]],{
+				M[[x-1,y,z]],M[[x-1,y-2,z]],M[[x,y-1,z]],M[[x-2,y-1,z]]
+			}];M[[x-1,y-1,z]]=++c2];
+			If[b[[2]]>0&&b[[4]]>0&&b[[6]]>0,AppendTo[C[[3]],{
+				M[[x-1,y,z]],M[[x-1,y,z-2]],M[[x,y,z-1]],M[[x-2,y,z-1]]
+			}];M[[x-1,y,z-1]]=++c2];
+			If[b[[3]]>0&&b[[4]]>0&&b[[7]]>0,AppendTo[C[[3]],{
+				M[[x,y-1,z]],M[[x,y-1,z-2]],M[[x,y,z-1]],M[[x,y-2,z-1]]
+			}];M[[x,y-1,z-1]]=++c2];
+			If[b[[2]]*b[[3]]*b[[4]]*b[[5]]*b[[6]]*b[[7]]*b[[8]]!=0,AppendTo[C[[4]],{
+				M[[x-1,y-1,z]],M[[x-1,y,z-1]],M[[x,y-1,z-1]],
+				M[[x-1,y-1,z-2]],M[[x-1,y-2,z-1]],M[[x-2,y-1,z-1]]
+			}]]],
+		{x,1,X,2},{y,1,Y,2},{z,1,Z,2}];
+	C];
+
+
 (* ::Text:: *)
 (*Algorithm 3 *)
 
 
-thinExhaustive[cc_,keep_:(True&)]:=Module[
-	{C,M1,M2,D,T,t},
-	C=cc;
-	M1=M2=Map[0&,cc,{2}];
-	D=Length[cc];
-	T=Table[{},D];
-	T[[1]]=Table[i,{i,Length[cc[[1]]]}];
+thinExhaustive[cc_]:=Module[
+	{U,E,R,e,k},
+	U=Map[(0&),cc,{2}];
+	Do[Scan[(U[[d-1,#]]++)&,cc[[d]],{2}],{d,2,Length[cc]}];
+	e=1;
+	
+	While[e!=0,
+	e=0;
+	E=Table[{},Length[cc]];
+	Do[If[U[[d,i]]==0,
+		Scan[(If[U[[d-1,#]]==1,
+			e++;
+			AppendTo[E[[d]],i];
+			AppendTo[E[[d-1]],#];
+			Return[]])&,
+		cc[[d,i]]]
+	],{d,2,Length[cc]},{i,Length[cc[[d]]]}];
+	Do[Scan[(
+		U[[d,#]]=-1;
+		If[d!=1,Scan[U[[d-1,#]]--&,cc[[d,#]]]];
+	)&,E[[d]]],{d,Length[E]}]];
+	
+	R=Table[0,Length[cc]];
 	Do[
-		T[[d]]=Table[i,{i,Length[cc[[d]]]}];
-		(* calculate for all d-1-cell that how many d-cell use it as boundary, track the last user *)
-		Do[Scan[(M1[[d-1,#]]=c;M2[[d-1,#]]+=1)&,cc[[d,c]]],{c,Length[cc[[d]]]}];
-		Do[
-			t=M1[[d-1,c]];
-			(* Find a simple pair *)
-			If[M2[[d-1,c]]==1&&keep[d,t,d-1,c],
-			(* Mark the pair as removeable *)
-			T[[d-1,c]]=0;T[[d,t]]=0;
-			(* Mark the other boundary of the simple cell as unremoveable *)
-			Scan[If[#!=c,M2[[d-1,#]]=0]&,cc[[d,t]]];
-		],{c,Length[cc[[d-1]]]}];
-		(* Remove witness and simple cell in d-1-cell*)
-		C[[d-1]]=MapThread[If[#1==0,Nothing,#2]&,{T[[d-1]],C[[d-1]]}];
-		(* Relabel d-cell*)
-		t=0;
-		C[[d]]=C[[d]]/.Table[If[T[[d-1,i]]!=0,t++;If[i!=t,i->t,Nothing],Nothing],{i,Length[T[[d-1]]]}];
-	,{d,2,D}];
-	(* Remove simple cell in D-cell*)
-	C[[D]]=MapThread[If[#1==0,Nothing,#2]&,{T[[D]],C[[D]]}];
-	If[Length[C[[D]]]==0,Most[C],C]
-];
+		k=0;
+		If[d!=Length[U],U[[d]]=(If[#<0,#,++k]&)/@U[[d]]];
+		R[[d]]=MapThread[(If[#1<0,Nothing,If[d==1,#2,U[[d-1,#]]&/@#2]])&,{U[[d]],cc[[d]]}],
+	{d,Length[U]}];
+	While[Length[R[[-1]]]==0,R=Most[R]];
+R];
 
 
 (* ::Text:: *)
@@ -127,22 +168,37 @@ thinExhaustive[cc_,keep_:(True&)]:=Module[
 sameCC=If[Length[#1]!=Length[#2],False,AllTrue[MapThread[(Length[#1]==Length[#2]&),{#1,#2}],TrueQ]]&;
 
 
-thin[cc_,{t1_:{Infinity,1},t2_:{Infinity,1}}]:=
-	Module[{C1,C2,I,S,m,keep,k},
-		C1=cc;
-		I=Map[Infinity&,cc,{2}];
-		keep=(If[k-I[[#1,#2]]>m[[#1]],AppendTo[S,{#1,#2}];AppendTo[S,{#3,#4}];False,True])&;
+thin[cc_,{t1_,t2_}]:=Module[
+	{U,I,E,e,k=0,q,R},
+	U=Map[(0&),cc,{2}];
+	I=Map[(Infinity&),cc,{2}];
+	Do[Scan[(U[[d-1,#]]++)&,cc[[d]],{2}],{d,2,Length[cc]}];
+	While[k==0||e>0,
+		Do[If[U[[d,i]]==0&&I[[d,i]]>k,I[[d,i]]=k],{d,Length[cc]},{i,Length[cc[[d]]]}];
+		k++;
+		q={-Infinity,k-Max[t1[[1]],t1[[2]]*k],k-Max[t2[[1]],t2[[2]]*k],-Infinity};
+		E=Table[{},Length[cc]];e=0;
+		Do[If[U[[d,i]]==0&&I[[d,i]]>q[[d]],
+			Scan[(If[U[[d-1,#]]==1,
+				e++;
+				AppendTo[E[[d]],i];
+				AppendTo[E[[d-1]],#];
+				Return[]])&,
+			cc[[d,i]]]
+		],{d,2,Length[cc]},{i,Length[cc[[d]]]}];
+		Do[Scan[(
+			U[[d,#]]=-1;
+			If[d!=1,Scan[U[[d-1,#]]--&,cc[[d,#]]]];
+		)&,E[[d]]],{d,Length[E]}]
+	];
+	R=Table[0,Length[cc]];
+	Do[
 		k=0;
-		While[!sameCC[C1,C2],
-			C2=C1;
-			Do[Scan[(I[[d-1,#]]=k)&,C2[[d,c]]],{d,3,Length[C2]},{c,Length[C2[[d]]]}];
-			k++;
-			m={Infinity,Max[t1[[1]],t1[[2]]*k],Max[t2[[1]],t2[[2]]*k],Infinity};
-			S={};
-			C1=thinExhaustive[C2,keep];
-			Scan[(I[[#[[1]],#[[2]]]]=Nothing)&,S];
-		];
-	C1];
+		If[d!=Length[U],U[[d]]=(If[#<0,#,++k]&)/@U[[d]]];
+		R[[d]]=MapThread[(If[#1<0,Nothing,If[d==1,#2,U[[d-1,#]]&/@#2]])&,{U[[d]],cc[[d]]}],
+	{d,Length[U]}];
+	While[Length[R[[-1]]]==0,R=Most[R]];
+R];
 
 
 End[];
