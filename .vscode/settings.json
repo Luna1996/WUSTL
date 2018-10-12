@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "wolframlibrary.h": "c",
+    "wstp.h": "c",
+    "wstp.h\u0000stp.h": "c",
+    "mathlink.h": "c",
+    "stdlib.h": "c"
+  }
+}

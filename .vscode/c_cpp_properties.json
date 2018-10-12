@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:\\Program Files\\Mathematica\\SystemFiles\\IncludeFiles\\C",
+                "D:\\Program Files\\Mathematica\\SystemFiles\\Links\\MathLink\\DeveloperKit\\Windows-x86-64\\CompilerAdditions",
+                "D:\\Program Files\\Mathematica\\SystemFiles\\Links\\WSTP\\DeveloperKit\\Windows-x86-64\\CompilerAdditions"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\mingw64\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
