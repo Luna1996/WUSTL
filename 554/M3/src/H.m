@@ -7,11 +7,15 @@ showCurve;
 showSurface;
 
 
-Begin["`P`"]
+Begin["`P`"];
 
 
-showCurve[L_,col_]:=Graphics[{{col,Line[L],Frame->False];
-showSurface[F_,col_]:=Graphics3D[{col,Polygon[F]},RotationAction->Clip,Lighting->"Neutral"];
+showCurve[CC_,col_:RGBColor[0,0,1]]:=Module[{V,E},
+	If[CC!={},{V,E}=CC;Graphics[{col,Map[Line[V[[#]]]&,E]},Frame->False]]];
+
+
+showSurface[CC_,col_:RGBColor[0,0,1]]:=Module[{V,T},
+	If[CC!={},{V,T}=CC;Graphics3D[{col,EdgeForm[{}],Map[Polygon[V[[#]]]&,T]},RotationAction->Clip,Lighting->"Neutral"]]];
 
 
 End[];
