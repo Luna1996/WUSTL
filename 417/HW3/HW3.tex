@@ -1,0 +1,22 @@
+\documentclass{article}
+  \input{../../tools/Template.tex}
+  \def\Assignment{CES 417T - HW3}
+\begin{document}
+\maketitle
+\section{Matlab}
+Here is the result
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{01.png}\end{figure}
+\section{LFD Problem 3.19}
+\begin{tlist}{4}
+	\item[(a)] Firstly, the transformation should better be an injection in this case. Secondely, $N$ is to large to get this method return in a reasonable time.
+	\item[(b)] I think this method is fine, no obvious problem.
+	\item[(c)] This method is a variant of the second one.
+\end{tlist}
+\section{LFD Exercise 4.5}
+\begin{tlist}{4}
+  \item[(a)] $\Gamma = I$.
+  \item[(b)] It should be a matix, and the fist column of $\Gamma$ should be 1.
+\end{tlist}
+\section{LFD Problem 4.8}
+Firstly, we have $$\nabla E_{aug}(w)=\nabla E_{in}(w)+2\lambda w$$ So we should updata the weight as $$w(t+1)=w(t)-\mu\nabla E_{aug}(w(t))=(1-2\mu\lambda)w(t)-\mu\nabla E_{in}(w(t))$$.
+\end{document}

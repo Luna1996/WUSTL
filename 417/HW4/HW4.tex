@@ -1,0 +1,31 @@
+\documentclass{article}
+  \input{../../tools/Template.tex}
+  \def\Assignment{CES 417T - HW4}
+\begin{document}
+\maketitle
+\section{}
+\section{LFD Problem 4.25}
+\begin{tlist}{4}
+  \item[(a)] No, all the models are not validated on the same validation set. The VC-bound will change.
+  \item[(b)] In this case, the validation model is non-related to the validation set. So it's equivalent to select model from hypothesis applied in $\mathcal{D}_{val}$.
+  \item[(c)] Denote $m_i|i=1,2,3...M$ for the $i$th modle. And $K_i$ fit the Hoeffding inequality $$\mathbb{P}[E_{out}(m_i)-E_{val}(m_i)>\epsilon]\leq e^{-\epsilon^2 K_i}$$ Then we have \begin{align*}
+    \mathbb{P}[E_{out}(m^*)-E_{val}(m^*)>\epsilon]
+    &\leq \sum_{i=1}^{M}\mathbb{P}[E_{out}(m_i)-E_{val}(m_i)>\epsilon]\\
+    &\leq \sum_{i=1}^{M}e^{-\epsilon^2 K_i}
+  \end{align*}
+  Set $$\kappa=-\frac{1}{2\epsilon^2}ln\left(\frac{1}{M}\sum_{i=1}^Me^{-\epsilon^2 K_i}\right)$$
+  We have \begin{align*}
+    \mathbb{P}[E_{out}(m^*)-E_{val}(m^*)>\epsilon]
+    &\leq \sum_{i=1}^{M}e^{-\epsilon^2 K_i}\\
+    &\leq Me^{ln\left(\frac{1}{M}\sum_{i=1}^Me^{-\epsilon^2 K_i}\right)}\\
+    &\leq Me^{-\epsilon^2\kappa(\epsilon)}
+  \end{align*}
+\end{tlist}
+\section{LFD Problem 5.4}
+\begin{tlist}{7}
+  \item[(a)(i)] We shouldn't use $N=12500$ since that is the total data number of 50 years and we only use today's data. Or we shouldn't use $M=500$ same for same reason.
+  \item[(a)(ii)] $\mathbb{P}[|E_{in}-E_{out}|>0.02]\leq 2\times 50000 \times e^{2\times 12500\times 0.02^2}\simeq 4.539993$
+  \item[(b)(i)] For the same reason stated in (a), we couldn't say buy and hold is a generally good choice since we get this concultion by only observing 500 stocks.
+  \item[(b)(ii)] If given the whole data sets and analyze the whole 50000 stocks maybe we can.
+\end{tlist}
+\end{document}

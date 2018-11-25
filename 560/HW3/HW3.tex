@@ -1,0 +1,10 @@
+\documentclass{article}
+  \input{../../tools/Template.tex}
+  \def\Assignment{CES 560M - HW3}
+\begin{document}
+\maketitle
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{result.png}\end{figure}
+This figure contains all information we need to analysis, all X axises are num-rob-entries, all Y axises are num-iq-entries, all Z axises are the parameters to record, num-phys-float-regs increasing from left to right, the parameter to record varis from top to down flowing the order shown below.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{ps.png}\end{figure}
+So num-phys-float-regs didn't affect those parameters, that mostly because we start from 256, and that might be enough already. First row tell us that the number of seconds simulated is decreasing when one or both of num-rob-entries and num-iq-entries is increasing. The 6th row tell us that the number of times rename has blocked due to ROB full Cache miss rates is decreasing when num-rob-entries increasing. Other rows tell us some other similar informations. But notice that 2nd row(Number of floating rename lookups) has many abnormal peaks.
+\end{document}

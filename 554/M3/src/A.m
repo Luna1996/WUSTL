@@ -160,28 +160,65 @@ LOOKUP={
 	},
 	Map[P[TRANS,#]&,cycles,{3}]
 };
+DUAL[{x_,y_,z_:0}]:=If[z==0,
+	If[EvenQ[x],{{x,y-1},{x,y+1}},
+		{{x-1,y},{x+1,y}}],
+	If[EvenQ[x],{{x,y-1,z-1},{x,y-1,z+1},{x,y+1,z+1},{x,y+1,z-1}},
+		If[EvenQ[y],{{x-1,y,z-1},{x-1,y,z+1},{x+1,y,z+1},{x+1,y,z-1}},
+			{{x-1,y-1,z},{x-1,y+1,z},{x+1,y+1,z},{x+1,y-1,z}}]
+	]
+];
 
 
 contour[img_,itt_,iso_,m_:"M"]:=Module[
-	{D,R,M,A,q,k=0,pad,set,V},
+	{D,R,M,f1,f2,k=0,k2=0,pad,setE,setC,V,borderQ,D1,D2},
 	D=Dimensions[img];R=Length[D];
 	V=If[R==2,4,8];
 	pad=Table[.5,R];
 	M=Table@@Join[{0},2D-1];
-	set=If[R==2,
+	setE=If[R==2,
 		Function[{x,y},M[[x,y]]=++k],
 		Function[{x,y,z},M[[x,y,z]]=++k]];
-	q=Module[
+	setC=If[R==2,
+		Function[{x,y},M[[x,y]]=++k2],
+		Function[{x,y,z},M[[x,y,z]]=++k2]];
+	borderQ[{x_,y_,z_:0}]:=If[R==2,
+		1<x<(2*P[D,1]-1)&&1<y<(2*P[D,2]-1),
+		1<x<(2*P[D,1]-1)&&1<y<(2*P[D,2]-1)&&1<z<(2*P[D,3]-1)
+	];
+	f1=Module[
 		{T,d=1,t=1},
 		T=P[EDGE,R-1]@@#;
 		Do[If[(P[img,P[i,1]]>iso\[Xor]P[img,P[i,2]]>iso)&&P[M,P[i,3]]==0,
-			set@@P[i,3];
+			setE@@P[i,3];
 			Sow[P[i,1]+((iso-P[img,P[i,1]])/(P[img,P[i,2]]-P[img,P[i,1]]))(P[i,2]-P[i,1])-pad,v];
 		],{i,T}];
 		Do[If[P[img,P[T,{i,1}]]<=iso,t+=d];d*=2,{i,V}];
 		Do[Sow[P[M,T[[i,3]]],e],{i,P[LOOKUP,{R-1,t}]}]
 	]&;
-	A=P[Reap[Q[itt,iso,q]],2]
+	f2=Module[
+		{T,B,d=1,t=1},
+		setC@@(2#);
+		T=P[EDGE,R-1]@@#;
+		B=P[Reap[Do[If[(P[img,P[i,1]]>iso\[Xor]P[img,P[i,2]]>iso),
+			If[P[M,P[i,3]]==0,
+				setE@@P[i,3];
+				Sow[{P[i,3],P[i,1]+((iso-P[img,P[i,1]])/(P[img,P[i,2]]-P[img,P[i,1]]))(P[i,2]-P[i,1])-pad},e];
+			];
+			Sow[P[M,P[i,3]],c]
+		],{i,T}],{c,e}],2];
+		Sow[P[B,{1,1}],c];
+		If[Length[P[B,2]]==1,Sow[P[B,{2,1}],e]];
+	]&;
+	If[m=="M",
+		P[Reap[Q[itt,iso,f1]],2],
+		{D1,D2}=P[Reap[Q[itt,iso,f2],{c,e}],2];
+		D2=Flatten[P[D2,1],1];
+		D1=Map[Mean[D2[[#,2]]]&,P[D1,1]];
+		D2=Select[P[D2,{All,1}],borderQ];
+		D2=Map[P[M,DUAL[#]]&,D2];
+		{D1,D2}
+	]
 ];
 
 
