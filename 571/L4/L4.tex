@@ -1,0 +1,37 @@
+\documentclass{article}
+  \input{../../tools/Template}
+  \def\Assignment{CES571S - L3 - MD5 Collision}
+\begin{document}
+\maketitle
+
+\section{Becoming a Certificate Authority}
+Generating.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{1-1.png}\end{figure}
+ca.key
+\begin{figure}[H]\centering\includegraphics{1-2.png}\end{figure}
+ca.crt
+\begin{figure}[H]\centering\includegraphics{1-3.png}\end{figure}
+
+\section{Creating a Certificate for SEEDPKILab2018.com}
+\subsection{Generate public/private key pair}
+\begin{figure}[H]\centering\includegraphics{2-1.png}\end{figure}
+\subsection{Generate a Certificate Signing Request (CSR)}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{2-2.png}\end{figure}
+\subsection{Generating Ceertificates}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{2-4.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{2-3.png}\end{figure}
+\section{Deploying Certificate in an HTTPS Web Server}
+\subsection{Configuring DNS}
+\begin{figure}[H]\centering\includegraphics{3-1.png}\end{figure}
+\subsection{Configuring the web server}
+since I don't have an gui ubuntu. I moved my work to my PC.
+\begin{figure}[H]\centering\includegraphics{3-3.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{3-4.png}\end{figure}
+\subsection{Getting the browser to accept our CA certificate}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{3-2.png}\end{figure}
+\subsection{Testing our HTTPS website}
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{3-5.png}\end{figure}
+but when I try localhost, I can't see the page
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{3-6.png}\end{figure}
+
+\end{document}
