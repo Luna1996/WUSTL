@@ -1,0 +1,31 @@
+\documentclass{article}
+  \input{../../tools/Template}
+  \def\Assignment{CES571S - Spectre - Final Report}
+\begin{document}
+\maketitle
+\section{Introduction}
+Spectre is a vulnerability that affects modern microprocessors that perform branch prediction. On most processors, the speculative execution resulting from a branch misprediction may leave observable side effects that may reveal private data to attackers. For example, if the pattern of memory accesses performed by such speculative execution depends on private data, the resulting state of the data cache constitutes a side channel through which an attacker may be able to extract information about the private data using a timing attack.
+\newline
+\newline
+Spectre attack can be conduct on browser victims. But this require attacker to send an attacker controled code to victims and execute it localy. Furthermore this attack can only retrieve the data from the process which runing the attacker controled code due to the seperation policy defined by mordern browser.
+\newline
+\newline
+Howerver a derivation of spectre attack, netspectre, a generic remote Spectre
+variant 1 attack, could allow attackers to read arbitrary memory from the systems available on the network containing the required Spectre gadgets—a code that performs operations like reading through an array in a loop with bounds check on each iteration.
+\newline
+\newline
+The original goal of this project is to setup a spectre attack cross processes, which now I knew impractical. So instead I implement a PoC of netspectre attack.
+
+\section{Implement local attack}
+The local attack is fairly easy to implement. By using C/C++, you can directly execute assmembly language in your program, which allow to clear cache and measure system ticks manually, both of which are very importent for a successful spectre attack.
+\section{Implement browser attack}
+Since JavaScript couldn't manually control the caches. We have to evict cache before every iteration using some unrelavent junk data block. And since chrome has already patched this vulnerability by disabled SharedArray default. You need to enable it from setting and then you maight want to check if your browser is vulnerabel to spectre by \href{https://xlab.tencent.com/special/spectre/spectre_check.html}{this site}.
+\section{Implement netspectre attack}
+Basicly to complete a netspectre attack you need so call 'gadget' be pre-insert into user's machine. Which will listen to attacker's remote packet to mistraining the predictor and send back the bits value. Meanwhile the attacker side will measure the response timing and repeat this process as many as possible until the result is satisfide.
+\section{Conclution}
+At present, spectre or netspectre is not a very serious problem that will endanger most common user. Since both of them need to pre-send some attacker code into user's machine. And even though netspectre attack claims to be able to retreive any data from a machine, but it's extremely slow. It's only reveal 15 bits per hour, namely 1 GB per 60822 years.
+\section{Reference}
+[1]:\href{https://spectreattack.com/spectre.pdf}{Spectre}
+\newline
+[2]:\href{https://arxiv.org/pdf/1807.10535.pdf}{NetSpectre}
+\end{document}
