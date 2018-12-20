@@ -1,5 +1,5 @@
 \documentclass{article}
-  \input{../../tools/Template}
+  \input{../../../tools/Template}
   \def\Assignment{CES571S - Spectre - Final Report}
 \begin{document}
 \maketitle
@@ -15,13 +15,21 @@ variant 1 attack, could allow attackers to read arbitrary memory from the system
 \newline
 \newline
 The original goal of this project is to setup a spectre attack cross processes, which now I knew impractical. So instead I implement a PoC of netspectre attack.
+\newline
+\newline
+The project repository is held by this \href{https://github.com/Luna1996/WUSTL/tree/master/571/Project}{link}.
 
 \section{Implement local attack}
 The local attack is fairly easy to implement. By using C/C++, you can directly execute assmembly language in your program, which allow to clear cache and measure system ticks manually, both of which are very importent for a successful spectre attack.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{01.png}\end{figure}
 \section{Implement browser attack}
 Since JavaScript couldn't manually control the caches. We have to evict cache before every iteration using some unrelavent junk data block. And since chrome has already patched this vulnerability by disabled SharedArray default. You need to enable it from setting and then you maight want to check if your browser is vulnerabel to spectre by \href{https://xlab.tencent.com/special/spectre/spectre_check.html}{this site}.
+\begin{figure}[H]\centering\includegraphics[width=\textwidth]{02.png}\end{figure}
 \section{Implement netspectre attack}
 Basicly to complete a netspectre attack you need so call 'gadget' be pre-insert into user's machine. Which will listen to attacker's remote packet to mistraining the predictor and send back the bits value. Meanwhile the attacker side will measure the response timing and repeat this process as many as possible until the result is satisfide.
+\begin{figure}[H]\centering\includegraphics{05.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{03.png}\end{figure}
+\begin{figure}[H]\centering\includegraphics{04.png}\end{figure}
 \section{Conclution}
 At present, spectre or netspectre is not a very serious problem that will endanger most common user. Since both of them need to pre-send some attacker code into user's machine. And even though netspectre attack claims to be able to retreive any data from a machine, but it's extremely slow. It's only reveal 15 bits per hour, namely 1 GB per 60822 years.
 \section{Reference}

