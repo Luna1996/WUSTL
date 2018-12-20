@@ -21,12 +21,21 @@ The project repository is held by this \href{https://github.com/Luna1996/WUSTL/t
 
 \section{Implement local attack}
 The local attack is fairly easy to implement. By using C/C++, you can directly execute assmembly language in your program, which allow to clear cache and measure system ticks manually, both of which are very importent for a successful spectre attack.
+\newline
+\newline
+This program got auto-deleted all the time unless I turn off real time virus detection. But it still won't upload to github. So I compressed it. Basicly this program will retreive a build-in string array's value. Most of it was done by following the guide of SEED lab. But when runing on my machine. Some code will be optimized out sometimes. Those code is commened in source.
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{01.png}\end{figure}
 \section{Implement browser attack}
 Since JavaScript couldn't manually control the caches. We have to evict cache before every iteration using some unrelavent junk data block. And since chrome has already patched this vulnerability by disabled SharedArray default. You need to enable it from setting and then you maight want to check if your browser is vulnerabel to spectre by \href{https://xlab.tencent.com/special/spectre/spectre_check.html}{this site}.
+\newline
+\newline
+This site will retreive a build-in SharedArray data. But unlike local attack. Browser attack will sometimes be inaccurate due to the timer, and cache eviction. This is done by following the discreption in paper [1].
 \begin{figure}[H]\centering\includegraphics[width=\textwidth]{02.png}\end{figure}
 \section{Implement netspectre attack}
 Basicly to complete a netspectre attack you need so call 'gadget' be pre-insert into user's machine. Which will listen to attacker's remote packet to mistraining the predictor and send back the bits value. Meanwhile the attacker side will measure the response timing and repeat this process as many as possible until the result is satisfide.
+\newline
+\newline
+To get this attack work, firstly you should open netspectre.html and set up a single byte data. Then open NetSpectre.exe and set the victim ip, this program designed to be run in the attacker's machine, but victim and attacker should under the same subnet. By clicking the start button, the program should start to measure the response time for each bit. It's might take more than one hour to retreive one byte from netspectre.html.
 \begin{figure}[H]\centering\includegraphics{05.png}\end{figure}
 \begin{figure}[H]\centering\includegraphics{03.png}\end{figure}
 \begin{figure}[H]\centering\includegraphics{04.png}\end{figure}
